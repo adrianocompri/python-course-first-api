@@ -59,9 +59,28 @@ def post_purchase_orders():
 
 
 @app.route('/purchase_orders/<int:id>/items', methods=['GET'])
-def purchase_orders_items(id):
+def get_purchase_orders_items(id):
   for po in purchase_orders:
     if po['id'] == id:
+      return jsonify(po['items'])
+    
+  return jsonify({'message': f'Itens do pedido {id} não foi encontrado'})
+
+
+@app.route('/purchase_orders/<int:id>/items', methods=['POST'])
+def post_purchase_orders_items(id):
+  request_data = request.get_json()
+
+  for po in purchase_orders:
+
+    if po['id'] == id:
+      
+      po['items'].append({
+        "id": request_data['id'],
+        "description": request_data['description'],
+        "price": request_data["price"]
+      })
+
       return jsonify(po['items'])
     
   return jsonify({'message': f'Itens do pedido {id} não foi encontrado'})
