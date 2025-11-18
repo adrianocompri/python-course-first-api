@@ -4,8 +4,8 @@ from app import create_app
 
 @pytest.fixture(scope='module')
 def test_client():
-  client = create_app()
+  app = create_app()
 
-  with client.test_client() as testing_client:
-    with client.app_context():
+  with app.test_client() as testing_client:
+    with app.app_context():
       yield testing_client
