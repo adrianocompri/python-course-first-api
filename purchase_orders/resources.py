@@ -1,5 +1,4 @@
-import json
-from flask import jsonify
+from flask import jsonify, make_response
 from flask_restful import Resource, reqparse
 
 purchase_orders = [
@@ -48,4 +47,4 @@ class PurchaseOrdersById(Resource):
       if po['id'] == id:
         return jsonify(po)
 
-    return jsonify({'message': 'Pedido de id {} não encontrado'.format(id)})
+    return make_response(jsonify({'message': 'Pedido de id {} não encontrado'.format(id)}), 404)

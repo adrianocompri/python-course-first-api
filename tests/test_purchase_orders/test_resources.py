@@ -56,5 +56,5 @@ def test_get_purchase_order_not_found(test_client):
   id = 9999
   response = test_client.get('/purchase_orders/{}'.format(id))
 
-  assert response.status_code == 200
+  assert response.status_code == 404
   assert response.json['message'] == 'Pedido de id {} não encontrado'.format(id)
