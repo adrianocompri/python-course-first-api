@@ -31,7 +31,8 @@ class PurchaseOrders(Resource):
 
     purchase_order = {
       'id': data['id'],
-      'description': data['description']
+      'description': data['description'],
+      'items': []
     }
 
     purchase_orders.append(purchase_order)
