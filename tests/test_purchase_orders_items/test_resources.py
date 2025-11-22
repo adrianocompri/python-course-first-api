@@ -53,3 +53,51 @@ def test_post_items_by_purchase_order_id_not_found(test_client):
 
   assert response.status_code == 404
   assert response.json['message'] == 'Pedido de id {} não encontrado'.format(id)
+
+
+def test_post_items_invalid_id(test_client):
+  id = 9999
+
+  response = test_client.post(
+    '/purchase_orders/{}/items'.format(id),
+    data=json.dumps({
+      'description': 'Items nro 2',
+      'price': 15.99
+    }),
+    content_type='application/json'
+  )
+
+  assert response.status_code == 400
+  assert response.json['message']['id'] == 'Informe um ID válido'
+
+
+def test_post_items_invalid_description(test_client):
+  id = 9999
+
+  response = test_client.post(
+    '/purchase_orders/{}/items'.format(id),
+    data=json.dumps({
+      'id': 2,
+      'price': 15.99
+    }),
+    content_type='application/json'
+  )
+
+  assert response.status_code == 400
+  assert response.json['message']['description'] == 'Informe uma descrição válida'
+
+
+def test_post_items_invalid_price(test_client):
+  id = 9999
+
+  response = test_client.post(
+    '/purchase_orders/{}/items'.format(id),
+    data=json.dumps({
+      'id': 2,
+      'description': 'Items nro 2'
+    }),
+    content_type='application/json'
+  )
+
+  assert response.status_code == 400
+  assert response.json['message']['price'] == 'Informe um preço válido'
