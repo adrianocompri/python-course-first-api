@@ -1,16 +1,21 @@
 import pytest
 from db import db
+
 from purchase_orders.model import PurchaseOrderModel
 from purchase_orders_items.model import PurchaseOrdersItemsModel
 
 
-@pytest.fixture
+@pytest.fixture()
 def seed_db():
-  po = PurchaseOrderModel('Purchase Order Teste')
+  po = PurchaseOrderModel('Pedido de testes')
   db.session.add(po)
   db.session.commit()
 
-  yield po
+  poi = PurchaseOrdersItemsModel('Item 1', 10.89, po.id)
+  db.session.add(poi)
+  db.session.commit()
+
+  yield {'purchase_order': po, 'item': poi}
 
 
 @pytest.fixture(scope='function', autouse=True)
