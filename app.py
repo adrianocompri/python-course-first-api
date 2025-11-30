@@ -8,12 +8,17 @@ from purchase_orders_items.resources import PurchaseOrdersItems
 first_time = True
 
 
-def create_app():
+def create_app(testing = False):
 
   app = Flask(__name__)
   api = Api(app)
 
-  app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost:5432/python_course'
+  database = 'python_course'
+
+  if testing:
+    database += '_test'
+  
+  app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://postgres:admin@localhost:5432/{database}'
   app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
   db.init_app(app)
