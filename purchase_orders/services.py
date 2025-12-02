@@ -1,13 +1,20 @@
 from .model import PurchaseOrderModel
 from flask import make_response, jsonify
+from .exceptions import QuantityException
 
 class PurchaseOrdersService:
+
+  def _check_quantity(self, quantity):
+    if not (quantity >= 50 and quantity <= 150):
+      raise QuantityException("A quantidade incorreta")
 
   def find_all(self):
     purchase_orders = PurchaseOrderModel.find_all()
     return [p.as_dict() for p in purchase_orders]
   
   def create(self, **kwargs):
+    self._check_quantity(kwargs['quantity'])
+
     purchase_order = PurchaseOrderModel(**kwargs)
     purchase_order.save()
 
