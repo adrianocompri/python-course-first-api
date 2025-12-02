@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_restful import Api
+from flask_migrate import Migrate
 from db import db
 
 from purchase_orders.resources import PurchaseOrders, PurchaseOrdersById
@@ -23,6 +24,8 @@ def create_app(testing = False):
 
   db.init_app(app)
 
+  Migrate(app, db)
+  
   api.add_resource(PurchaseOrders, '/purchase_orders')
   api.add_resource(PurchaseOrdersById, '/purchase_orders/<int:id>')
   api.add_resource(PurchaseOrdersItems, '/purchase_orders/<int:id>/items')
