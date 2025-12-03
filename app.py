@@ -1,3 +1,4 @@
+import os
 from flask import Flask
 from flask_restful import Api
 from flask_migrate import Migrate
@@ -9,23 +10,18 @@ from purchase_orders_items.resources import PurchaseOrdersItems
 first_time = True
 
 
-def create_app(testing = False):
+def create_app():
 
   app = Flask(__name__)
   api = Api(app)
-
-  database = 'python_course'
-
-  if testing:
-    database += '_test'
   
-  app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://postgres:admin@localhost:5432/{database}'
+  app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_URI')
   app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
   db.init_app(app)
 
   Migrate(app, db)
-  
+
   api.add_resource(PurchaseOrders, '/purchase_orders')
   api.add_resource(PurchaseOrdersById, '/purchase_orders/<int:id>')
   api.add_resource(PurchaseOrdersItems, '/purchase_orders/<int:id>/items')
